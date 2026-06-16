@@ -10,6 +10,11 @@ match stream.read(&mut buffer) {
          String::from_utf8_lossy(&buffer[..bytes_read]);
         println!("Recieved: {}", message);
 
+        let message_string = message.to_string();
+        let response = format!("You said: {}",message_string);
+        stream.write_all(response.as_bytes()).unwrap();
+
+        stream.write_all(response.as_bytes()).unwrap();
         stream 
         .write_all(b"Server received your message!")
         .unwrap();
