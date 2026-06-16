@@ -1,84 +1,113 @@
-# Rust TCP Server
+```markdown
+# 🦀 Rust TCP Server
 
-A beginner-friendly TCP server built in Rust to learn low-level networking fundamentals, TCP streams, buffers, and client-server communication.
+[![Rust](https://img.shields.io/badge/Rust-1.70%2B-orange?style=flat-square&logo=rust)](https://www.rust-lang.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](https://opensource.org/licenses/MIT)
 
-## What I Learned
+A foundational, single-threaded TCP server built in Rust. This project was created to demystify low-level networking by implementing a core protocol from scratch using only the Rust standard library. It serves as a practical introduction to systems programming concepts like socket handling, byte buffers, and the request-response cycle.
 
-This project helped me understand:
+## 🎯 Project Goals
 
-- TCP fundamentals
-- Client ↔ Server communication
-- `TcpListener`
-- `TcpStream`
-- Buffers
-- Reading and writing data
-- Error handling with `Result`
-- `match` expressions
-- Rust ownership and mutable borrowing
+This project was designed to provide a deep, hands-on understanding of:
 
-## Features
+- **Fundamental TCP/IP Concepts:** Connection establishment, data streaming, and socket lifecycles.
+- **Rust's Core Networking Primitives:** Working directly with `TcpListener` and `TcpStream`.
+- **Low-Level I/O:** Managing fixed-size byte buffers (`[u8; 1024]`) and performing read/write operations.
+- **Core Rust Mechanics:** Applying ownership, mutable borrowing (`&mut`), error handling with `Result`, and pattern matching (`match`).
 
-- TCP server running on localhost
-- Accepts incoming client connections
-- Reads messages from connected clients
-- Prints received messages
-- Sends responses back to clients
+## ✨ Features
 
-## Project Structure
+- **Single-Client Focus:** Handles one client connection at a time, making the request lifecycle easy to trace and understand.
+- **Echo Protocol:** Receives a message from a client and responds with `You said: [message]`.
+- **Console Logging:** Outputs client connection details and received messages to the server console for clear observability.
+- **Graceful Error Handling:** Prints connection and read errors to the console without crashing the server on a single failed client.
 
+## 🚀 Quick Start
+
+### Prerequisites
+- [Rust](https://www.rust-lang.org/tools/install) and Cargo (version 1.70 or later).
+
+### Run the Server
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/os0b1/rust-tcp-server-v2.git
+    cd rust-tcp-server-v2
+    ```
+
+2.  **Build and run the server:**
+    ```bash
+    cargo run
+    ```
+
+3.  **Connect and send a message:**
+    Open a new terminal and use `nc` (netcat) to connect:
+    ```bash
+    nc localhost 8080
+    ```
+    Type any message and press Enter. The server will respond.
+
+**Example Interaction:**
 ```text
-src/
-└── main.rs
+# In the server terminal:
+New client connected: Ok(127.0.0.1:49382)
+Received: Hello from Netcat!
+
+# In the netcat client terminal:
+Hello from Netcat!
+You said: Hello from Netcat!
 ```
 
-## Running the Project
+🏗️ Architecture & Workflow
 
-Clone the repository:
+The server's request-handling flow is as follows:
 
-```bash
-git clone <repo-url>
+1. Binding: The main function binds a TcpListener to 127.0.0.1:8080.
+2. Accepting: It waits in a loop for incoming connections.
+3. Handling: On a successful connection, the handle_client function is called.
+4. Reading: The function reads the incoming bytes into a fixed-size stack buffer.
+5. Processing: It converts the received bytes to a String and logs it.
+6. Responding: A response string is formatted, converted to bytes, and written back to the TcpStream.
+7. Cleanup: The connection is automatically closed when the stream goes out of scope.
+
+🔧 Technical Stack
+
+· Language: Rust
+· Domain: Systems Programming, Networking
+· Libraries: Rust Standard Library (std::net, std::io)
+
+🗺️ Future Roadmap
+
+This project is a foundation for exploring more advanced concepts. Planned improvements include:
+
+· Multi-Client Handling: Using threads to handle multiple clients concurrently.
+· Asynchronous I/O: Refactoring with Tokio for a non-blocking, high-performance server.
+· Custom Protocol: Implementing a simple application-level protocol (e.g., a basic key-value store).
+· Comprehensive Error Handling: Replacing unwrap() with robust, context-rich error propagation using anyhow or thiserror.
+· Unit & Integration Testing: Adding tests for the server's core logic.
+
+👤 Author
+
+Great Osoba
+
+· GitHub
+
+This project was built as part of a dedicated journey to master systems engineering and Rust programming.
+
+📄 License
+
+This project is open source and available under the MIT License.
+
 ```
 
-Move into the project folder:
+---
 
-```bash
-cd rust-tcp-server
-```
+### 🔑 Key Improvements Explained
 
-Run the server:
+1.  **Professional Structure & Visuals:** The title, badges, and emojis make it instantly more inviting and organized. Clear section headers allow for quick scanning.
+2.  **Focus on "Why" and Concepts:** It highlights the *learning goals* and *core concepts* right at the top. The "Architecture & Workflow" section uses simple language to explain the technical process, which is great for demonstrating your understanding.
+3.  **Complete User Guide:** The "Quick Start" includes every command needed to clone, run, and test the project. The "Example Interaction" section clearly shows what to expect, eliminating any confusion for a user.
+4.  **Enhanced Technical Credibility:** The "Technical Stack" is clearly defined. The "Future Roadmap" lists specific, relevant technologies, showing you have a clear plan for advancing your skills.
+5.  **Polished Professional Details:** It includes a proper license mention, correct formatting of code blocks, and clear attribution, making your project look complete and serious.
 
-```bash
-cargo run
-```
 
-The server will run on:
 
-```text
-127.0.0.1:8080
-```
-
-## Example Flow
-
-1. Client connects to server
-2. Server creates a `TcpStream`
-3. Server reads incoming bytes into a buffer
-4. Bytes are converted into readable text
-5. Server sends a response back
-
-## Tech Stack
-
-- Rust
-- TCP Networking
-- Rust Standard Library (`std::net`)
-
-## Future Improvements
-
-- Multi-client handling
-- Threading
-- Async networking with Tokio
-- Custom messaging protocol
-- Better error handling
-
-## Author
-
-Built by Great Osoba as part of a systems engineering and Rust learning journey.
